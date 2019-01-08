@@ -24,7 +24,7 @@
                 <div class="circular ui green icon button" onclick="validForm()">
                     <i class="white check icon icon"></i>
                 </div>
-                <div class="circular ui icon red button" onclick="eraseGenre()">
+                <div class="circular ui icon red button" id="iconedit" onclick="eraseGenre()">
                     <i class="white close icon icon"></i>
                 </div>
 
@@ -120,11 +120,33 @@
             type: 'delete',
             dataType: 'json',
             contentType: 'application/json',
-            success: onSuccessUpdateNameGenre,
-            error: onErrorOnUpdateNameGenre,
+            success: onSuccessDeleteNameGenre,
+            error: onErrorOnDeleteNameGenre,
             data: JSON.stringify(genreVal)
         });
 
+    }
+
+    function onSuccessDeleteNameGenre(result) {
+        console.log(result);
+        idElt = "#genre" + result.id;
+        newName = result.name
+        // $(idElt).remove(idElt);
+        // $('#iconedit').removeAttr('style').hide();
+        // $('#iconedit').parents('tr').remove();
+        $(idElt).parents('tr').remove();
+    }
+
+
+    function onErrorOnDeleteNameGenre(jqXHR, textStatus, errorThrown) {
+        alert("Echec de l'opération de suppression...");
+        console.log('jqXHR:');
+        console.log(jqXHR);
+        console.log("message d'erreur: "+jqXHR.responseJSON.message);
+        console.log('textStatus:');
+        console.log(textStatus);
+        console.log('errorThrown:');
+        console.log(errorThrown);
     }
 
 </script>
