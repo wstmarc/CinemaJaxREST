@@ -1,8 +1,11 @@
 package fr.laerce.cinema.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 /**
@@ -24,13 +27,17 @@ public class Genre {
      */
     @Basic
     @Unique
+    @Size(min = 3, max = 30, message = "Longueur incorrecte")
     @Column(name = "name", nullable = false, length = 30)
     private String name;
 
     /**
      * L'ensemble des films associés au genre
      */
-    @ManyToMany(mappedBy = "genres")
+//    @ManyToMany(mappedBy = "genres")
+    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
+    @JsonIgnore
+//    @JsonBackReference
     private Set<Film> films;
 
 

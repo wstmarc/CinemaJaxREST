@@ -1,5 +1,7 @@
 package fr.laerce.cinema.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -32,20 +34,24 @@ public class Film {
     private LocalDate releaseDate;
     @ManyToOne
     @JoinColumn(name ="film_director")
+    @JsonManagedReference
     private Person director;
 
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonBackReference
     private Set<Play> roles;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="film_genre", joinColumns = @JoinColumn(name="film_id"),
     inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @JsonManagedReference
     private Set<Genre> genres;
 
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonBackReference
     private Set<Review> reviews;
 
 

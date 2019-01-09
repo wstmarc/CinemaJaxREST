@@ -69,9 +69,13 @@ public class GenreRestController {
      * @param genre
      * @return
      */
-    @DeleteMapping("")
-    public Genre rm(@RequestBody Genre genre){
-        return genreManager.delete(genre.getId());
+    @DeleteMapping("/{id}")
+//    @DeleteMapping("")
+//    public Genre rm(@RequestBody Genre genre){
+//        return genreManager.delete(genre.getId());
+//    }
+    public Genre remove(@PathVariable ("id") long id){
+        return genreManager.delete(id);
     }
 
     /**
