@@ -8,6 +8,7 @@
 <body>
 <div th:include="fragments/layout :: header-page"></div>
 
+<!-- Modale pour l'ajout, modification, suppression d'un genre -->
 <div class="ui modal">
     <div class="ui container padded">
         <div class="Header">
@@ -25,7 +26,8 @@
                 <div class="circular ui green icon button" onclick="updateGenre()" id="mod-button">
                     <i class="white check icon icon"></i>
                 </div>
-                <div class="circular ui icon red button" onclick="eraseGenre()" id="del-button">
+                <!--<div class="circular ui icon red button" onclick="eraseGenre()" id="del-button">-->
+                <div class="circular ui icon red button" onclick="openConfirmDialog()" id="del-button">
                     <i class="white minus icon"></i>
                 </div>
                 <div class="circular ui icon blue button" onclick="exitDialog()" id="exit-button">
@@ -34,6 +36,19 @@
 
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Modale pour la demande de confirmation de suppression -->
+<div class="mini modal">
+    <div class="header white">Voulez-vous confirmer la suppression ?</div>
+    <div class="content">
+        <p></p>
+    </div>
+    <div class="actions">
+        <div class="ui approve button" onclick="eraseGenre()">Oh oui<i class="checkmark icon"></i></div>
+        <!--<div class="ui button">Fuck, pas besoin de ce bouton!</div>-->
+        <div class="ui cancel button" onclick="exitDialog()">Non pitié<i class="close icon icon"></i></div>
     </div>
 </div>
 
@@ -60,11 +75,13 @@
     $('#menu-genres').addClass("active");
     $('.ui.dropdown').dropdown();
     $('.ui.modal').modal();
+    $('.mini.modal').hide();
     $('#rgenre-template').hide();
 
     
 
     function openDialogMod(idGenre) {
+        console.log("openDialogMod");
         $('#id-genre').val(idGenre);
         $('#name-genre').val($('#genre' + idGenre).text());
         $('#add-button').hide();
@@ -74,6 +91,7 @@
     }
 
     function openDialogAdd() {
+        console.log("openDialogAdd");
         $('#id-genre').val(0);
         $('#name-genre').val("");
         $('#add-button').show();
@@ -82,7 +100,14 @@
         $('.ui.modal').modal('show');
     }
 
+    function openConfirmDialog() {
+        $('.mini.modal')
+            .modal('show')
+        ;
+    }
+
     function addGenre() {
+        console.log("addGenre");
         $('.ui.modal').modal('hide');
         genreVal = {
           //  "id": $('#id-genre').val(),
@@ -100,6 +125,7 @@
     }
     
     function eraseGenre() {
+        console.log("eraseGenre");
         $('.ui.modal').modal('hide');
         genreVal = {
             "id": $('#id-genre').val(),
@@ -119,6 +145,7 @@
     }
 
     function updateGenre() {
+        console.log("updateGenre");
         $('.ui.modal').modal('hide');
         genreVal = {
             "id": $('#id-genre').val(),
@@ -136,6 +163,7 @@
     }
 
     function onSuccessAddNameGenre(result){
+        console.log("onSuccesAddNameGenre");
         var row = $('#rgenre-template').clone();
         row.attr("id", 'rgenre'+result.id);
         col = row.find('#genre-template');
@@ -155,11 +183,13 @@
     }
 
     function onSuccessUpdateNameGenre(result) {
+        console.log("onSuccesUpdateNameGenre");
         $("#genre" + result.id).text(result.name);
     }
 
 
     function onErrorOnGenreApi(jqXHR, textStatus, errorThrown) {
+        console.log("onErrorOnGenreApi");
         alert("Echec de l'opération de mise à jour...");
         console.log('jqXHR:');
         console.log(jqXHR);
@@ -172,13 +202,15 @@
 
 
     function onSuccessEraseNameGenre(result) {
+        console.log("onSuccesEraseNameGenre");
         $('#rgenre' + result.id).remove();
     }
     
     function exitDialog() {
-        $('.ui.modal').modal('hide');
+        console.log("exitDialog");
+        // $('.ui.modal').modal('hide');
+        $('.modal').modal('hide');
     }
-
 
 </script>
 </body>

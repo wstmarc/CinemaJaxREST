@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -27,6 +29,8 @@ public class Genre {
      */
     @Basic
     @Unique
+    @NotBlank
+    @NotNull
     @Size(min = 3, max = 30, message = "Longueur incorrecte")
     @Column(name = "name", nullable = false, length = 30)
     private String name;
