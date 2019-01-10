@@ -52,7 +52,8 @@ public class PersonController {
     public String add(Model model){
         Person person = new Person();
         model.addAttribute("person", person);
-        return "person/form";
+        return "person/add";
+//        return "person/form";
     }
 
     @PostMapping("/add")

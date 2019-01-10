@@ -9,7 +9,7 @@
 <div th:include="fragments/layout :: header-page"></div>
 
 <!-- Modale pour l'ajout, modification, suppression d'un genre -->
-<div class="ui modal">
+<div id="modalUI" class="ui modal">
     <div class="ui container padded">
         <div class="Header">
             <h3>Genre</h3>
@@ -40,21 +40,67 @@
 </div>
 
 <!-- Modale pour la demande de confirmation de suppression -->
-<div class="mini modal">
-    <div class="header white">Voulez-vous confirmer la suppression ?</div>
+<div id="modalMini" class="mini modal">
+    <div class="ui red header">ATTENTION</div>
     <div class="content">
-        <p></p>
+        <p  style="color: white" class="ui header">Voulez-vous confirmer la suppression ?</p>
     </div>
     <div class="actions">
-        <div class="ui approve button" onclick="eraseGenre()">Oh oui<i class="checkmark icon"></i></div>
+        <!--<div class="ui approve labeled icon button" onclick="eraseGenre()">Oh oui<i class="checkmark green icon"></i></div>-->
+        <div class="ui green approve right labeled icon button" onclick="eraseGenre()">Oh oui<i class="checkmark icon"></i></div>
         <!--<div class="ui button">Fuck, pas besoin de ce bouton!</div>-->
-        <div class="ui cancel button" onclick="exitDialog()">Non pitié<i class="close icon icon"></i></div>
+        <div class="ui red cancel right labeled icon button" onclick="exitDialog()">Non pitié<i class="close icon"></i></div>
     </div>
 </div>
 
+<!-- TEST Label latéral de type ruban -->
+<div class="html ui top attached segment">
+    <div class="ui one column grid">
+        <div class="column">
+            <div class="ui raised segment">
+                <a class="ui red ribbon label">Overview</a>
+                <span>Account Details</span>
+                <p>Qu'est-ce que le Lorem Ipsum?</p>
+                <p>Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</p>
+            </div>
+        </div>
+        <!--<div class="column">-->
+            <!--<div class="ui segment">-->
+                <!--<a class="ui orange right ribbon label">Specs</a>-->
+                <!--<p>Pourquoi l'utiliser?</p>-->
+                <!--<p>On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L'avantage du Lorem Ipsum sur un texte générique comme 'Du texte. Du texte. Du texte.' est qu'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur faux texte par défaut, et une recherche pour 'Lorem Ipsum' vous conduira vers de nombreux sites qui n'en sont encore qu'à leur phase de construction. Plusieurs versions sont apparues avec le temps, parfois par accident, souvent intentionnellement (histoire d'y rajouter de petits clins d'oeil, voire des phrases embarassantes).</p>-->
+                <!--<a class="ui teal right ribbon label">Reviews</a>-->
+                <!--<p></p>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>
+
+<!-- TEST Modale suppression de compte -->
+<div id="modalSmall" class="ui small test modal transition visible active" style="display: block !important;">
+    <div class="header">
+        Delete Your Account
+    </div>
+    <div class="content">
+        <p>Are you sure you want to delete your account</p>
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            No
+        </div>
+        <div class="ui positive right labeled icon button">
+            Yes
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<!-- BOUTON Ajouter genre -->
 <div class="ui primary button" onclick="openDialogAdd()">
     Ajouter un genre
 </div>
+
+<!-- TABLE listant tous les genres de films -->
 <table class="ui selectable celled table">
     <thead>
     <tr>
@@ -69,16 +115,22 @@
     </tbody>
 </table>
 
-<div th:include="fragments/layout :: footer-js"></div>
+<div th:include="fragments/layout :: footer-js"></div><!-- INCLUSION de tous les scripts javascript -->
 
 <script type="application/javascript">
     $('#menu-genres').addClass("active");
     $('.ui.dropdown').dropdown();
     $('.ui.modal').modal();
-    $('.mini.modal').hide();
-    $('#rgenre-template').hide();
+    // $('#modalUI').modal();
 
-    
+    // $('.mini.modal').modal('hide');////////
+
+    // $('.small.modal').modal('hide');////////
+
+
+    // $('.ui.small.test.modal').modal('hide');
+
+    $('#rgenre-template').hide();
 
     function openDialogMod(idGenre) {
         console.log("openDialogMod");
@@ -87,7 +139,12 @@
         $('#add-button').hide();
         $('#mod-button').show();
         $('#del-button').show();
+        // $('#modalSmall').hide();
+        // $('.ui.small.test.modal').modal('hide');
         $('.ui.modal').modal('show');
+        // $('.mini.modal').modal('hide');////////
+        // $('.small.modal').modal('hide');////////
+        $('#modalSmall').modal('hide');////////
     }
 
     function openDialogAdd() {
@@ -97,10 +154,17 @@
         $('#add-button').show();
         $('#mod-button').hide();
         $('#del-button').hide();
-        $('.ui.modal').modal('show');
+        // $('.ui.modal').modal('show');
+        $('#modalUI').modal('show');
+
+        // $('.mini.modal').hide();////////
+        // $('#modalMini').hide();////////
+        // $('.small.modal').hide();////////
+        // $('#modalSmall').hide();////////
     }
 
     function openConfirmDialog() {
+        console.log("openConfirmDialog")
         $('.mini.modal')
             .modal('show')
         ;
@@ -187,7 +251,6 @@
         $("#genre" + result.id).text(result.name);
     }
 
-
     function onErrorOnGenreApi(jqXHR, textStatus, errorThrown) {
         console.log("onErrorOnGenreApi");
         alert("Echec de l'opération de mise à jour...");
@@ -200,7 +263,6 @@
         console.log(errorThrown);
     }
 
-
     function onSuccessEraseNameGenre(result) {
         console.log("onSuccesEraseNameGenre");
         $('#rgenre' + result.id).remove();
@@ -210,6 +272,7 @@
         console.log("exitDialog");
         // $('.ui.modal').modal('hide');
         $('.modal').modal('hide');
+        // $('.modal').hide();
     }
 
 </script>
